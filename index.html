@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>BRUTALISM — Наследие</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #888888;
+            --spacing-mobile: 20px;
+            --spacing-desktop: 40px;
+            --border-width: 2px;
+        }
+
+        html {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        /* NOISE OVERLAY - оптимизировано для мобильных */
+        #noise-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.05;
+            mix-blend-mode: multiply;
+        }
+
+        .noise-static {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            animation: noiseShift 0.5s steps(5) infinite;
+        }
+
+        @keyframes noiseShift {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(5%, 5%); }
+            30% { transform: translate(-5%, 5%); }
+            40% { transform: translate(5%, -5%); }
+            50% { transform: translate(-2%, 3%); }
+            60% { transform: translate(4%, -2%); }
+            70% { transform: translate(-3%, 4%); }
+            80% { transform: translate(2%, -4%); }
+            90% { transform: translate(-4%, 2%); }
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px var(--spacing-mobile);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: var(--border-width) solid var(--black);
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            91% { transform: translate(-2px, 2px); }
+            92% { transform: translate(2px, -2px); }
+            93% { transform: translate(-2px, -2px); }
+            94% { transform: translate(2px, 2px); }
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--black);
+            transition: all 0.2s;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--black);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            position: relative;
+            transition: all 0.1s;
+            padding: 5px 0;
+        }
+
+        nav a:active {
+            color: var(--gray);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--black);
+            transition: width 0.2s;
+        }
+
+        nav a:active::after {
+            width: 100%;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px var(--spacing-mobile) 60px;
+            position: relative;
+            border-bottom: var(--border-width) solid var(--black);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 18vw, 12rem);
+            font-weight: 900;
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            margin-bottom: 30px;
+            position: relative;
+            word-break: break-word;
+        }
+
+        .hero-title .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title .line span {
+            display: block;
+            transform: translateY(100%);
+            animation: revealUp 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+
+        .hero-title .line:nth-child(1) span { animation-delay: 0.1s; }
+        .hero-title .line:nth-child(2) span { animation-delay: 0.2s; }
+        .hero-title .line:nth-child(3) span { animation-delay: 0.3s; }
+
+        @keyframes revealUp {
+            to { transform: translateY(0); }
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            max-width: 100%;
+            text-align: center;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeIn 1s 0.6s forwards;
+            padding: 0 10px;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .coordinates {
+            position: absolute;
+            bottom: 30px;
+            left: var(--spacing-mobile);
+            font-size: 0.8rem;
+            font-weight: 700;
+            opacity: 0;
+            animation: fadeIn 1s 0.8s forwards;
+            line-height: 1.3;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            right: var(--spacing-mobile);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* CONTENT SECTIONS */
+        section {
+            padding: 80px var(--spacing-mobile);
+            border-bottom: var(--border-width) solid var(--black);
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .section-number {
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: var(--border-width) solid var(--black);
+            padding: 8px 15px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 8vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            max-width: 100%;
+            word-break: break-word;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            border: var(--border-width) solid var(--black);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.15s;
+            background: var(--white);
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            touch-action: manipulation;
+        }
+
+        .card:active {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.2s;
+            z-index: 0;
+        }
+
+        .card:hover::before,
+        .card:active::before {
+            left: 0;
+        }
+
+        .card:hover,
+        .card:active {
+            color: var(--white);
+        }
+
+        .card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-year {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            word-break: break-word;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+
+        .card-coords {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            opacity: 0.6;
+        }
+
+        /* IMAGE OVERLAY */
+        .card-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            filter: grayscale(100%) contrast(1.2);
+            transition: opacity 0.2s, filter 0.2s;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card:hover .card-image,
+        .card:active .card-image {
+            opacity: 0.15;
+            filter: grayscale(100%) contrast(1.3);
+        }
+
+        /* MARQUEE */
+        .marquee {
+            background: var(--black);
+            color: var(--white);
+            padding: 20px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            border-top: var(--border-width) solid var(--black);
+            border-bottom: var(--border-width) solid var(--black);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding-left: 100%;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 60px var(--spacing-mobile);
+            text-align: center;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .footer-text {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            border-bottom: 2px solid var(--white);
+            padding-bottom: 2px;
+            transition: all 0.2s;
+            display: inline-block;
+            padding: 10px 0;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-link:active {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* FLOATING ELEMENTS - скрыто на мобильных */
+        .floating-coords {
+            position: fixed;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+
+        /* CURSOR - скрыто на тач-устройствах */
+        .cursor {
+            display: none;
+        }
+
+        /* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: var(--black);
+            color: var(--white);
+            border: 2px solid var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-decoration: none;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            min-height: 44px;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:active {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* PROGRESS BAR */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--black);
+            z-index: 10000;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* LARGE TOUCH TARGETS */
+        a, button, .card {
+            min-height: 44px;
+        }
+
+        /* RESPONSIVE BREAKPOINTS */
+        @media (min-width: 768px) {
+            :root {
+                --spacing-mobile: 40px;
+            }
+
+            header {
+                padding: 20px var(--spacing-desktop);
+            }
+
+            .menu-toggle {
+                display: none;
+            }
+
+            nav ul {
+                gap: 40px;
+            }
+
+            nav a {
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                padding: 120px var(--spacing-desktop) 60px;
+            }
+
+            .hero-title {
+                font-size: clamp(3rem, 15vw, 12rem);
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            section {
+                padding: 120px var(--spacing-desktop);
+            }
+
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 40px;
+            }
+
+            .card {
+                padding: 40px;
+                min-height: 350px;
+            }
+
+            .card-title {
+                font-size: 2rem;
+            }
+
+            .floating-coords {
+                display: block;
+            }
+
+            .cursor {
+                display: block;
+                width: 20px;
+                height: 20px;
+                border: 2px solid var(--black);
+                position: fixed;
+                pointer-events: none;
+                z-index: 10000;
+                transition: transform 0.1s;
+                mix-blend-mode: difference;
+            }
+
+            .cursor.active {
+                transform: scale(2);
+                background: var(--black);
+            }
+
+            .marquee-content {
+                font-size: 1.5rem;
+                animation-duration: 20s;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* REDUCED MOTION */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* HIGH CONTRAST MODE SUPPORT */
+        @media (prefers-contrast: high) {
+            :root {
+                --black: #000000;
+                --white: #ffffff;
+                --gray: #000000;
+            }
+            
+            .card {
+                border-width: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- NOISE CANVAS -->
+    <canvas id="noise-canvas"></canvas>
+    <div class="noise-static"></div>
+
+    <!-- CUSTOM CURSOR (desktop only) -->
+    <div class="cursor"></div>
+
+    <!-- FLOATING COORDINATES -->
+    <div class="floating-coords">55°45'21.0"N 37°37'04.0"E</div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">BRUTALISM</div>
+        
+        <!-- Mobile menu toggle -->
+        <div class="menu-toggle" id="menuToggle" aria-label="Меню" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <nav id="nav">
+            <ul>
+                <li><a href="#about">О проекте</a></li>
+                <li><a href="#monuments">Объекты</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1 class="hero-title">
+            <span class="line"><span>СОВЕТСКИЙ</span></span>
+            <span class="line"><span>БРУТАЛИЗМ</span></span>
+            <span class="line"><span>НАСЛЕДИЕ</span></span>
+        </h1>
+        <p class="hero-subtitle">
+            Архитектура эпохи. Бетон как идеология. Формы, пережившие время.
+        </p>
+        <div class="coordinates">
+            55°45'21.0"N<br>
+            37°37'04.0"E
+        </div>
+        <div class="scroll-indicator">↓ Листать</div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee">
+        <div class="marquee-content">
+            БЕТОН • АРХИТЕКТУРА • МОНОЛИТ • ФОРМА • ФУНКЦИЯ • БЕТОН • АРХИТЕКТУРА • МОНОЛИТ • ФОРМА • ФУНКЦИЯ •
+            БЕТОН • АРХИТЕКТУРА • МОНОЛИТ • ФОРМА • ФУНКЦИЯ • БЕТОН • АРХИТЕКТУРА • МОНОЛИТ • ФОРМА • ФУНКЦИЯ •
+        </div>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <section id="about">
+        <div class="section-header">
+            <div class="section-number">01 / О проекте</div>
+            <h2 class="section-title">Брутализм — это честность материала и конструкции</h2>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="card-year">1950–1980</span>
+                <h3 class="card-title">Эпоха</h3>
+                <p class="card-text">
+                    Период расцвета советского брутализма. Время смелых экспериментов 
+                    с бетоном, формой и пространством.
+                </p>
+            </div>
+            <div class="card">
+                <span class="card-year">4000+</span>
+                <h3 class="card-title">Объектов</h3>
+                <p class="card-text">
+                    Более четырёх тысяч зданий и сооружений по всему СССР. 
+                    От жилых домов до монументальных общественных центров.
+                </p>
+            </div>
+            <div class="card">
+                <span class="card-year">∞</span>
+                <h3 class="card-title">Наследие</h3>
+                <p class="card-text">
+                    Архитектура, которая переживёт нас. Бетон не стареет — 
+                    он приобретает характер.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MONUMENTS SECTION -->
+    <section id="monuments">
+        <div class="section-header">
+            <div class="section-number">02 / Объекты</div>
+            <h2 class="section-title">Избранные памятники архитектуры</h2>
+        </div>
+        <div class="grid">
+            <article class="card">
+                <img src="https://pastvu.com/_p/a/c/a/9/ca9313ded3f09182171c87c3310e5478.jpg" alt="Пресс-центр Олимпиады-80" class="card-image" loading="lazy">
+                <div>
+                    <span class="card-year">1977–1980</span>
+                    <h3 class="card-title">Пресс-центр Олимпиады-80</h3>
+                    <p class="card-text">
+                        Москва. Здание с крупными формами и выразительной 
+                        текстурой бетона.
+                    </p>
+                </div>
+                <div class="card-coords">55°42'25.0"N 37°33'20.0"E</div>
+            </article>
+
+            <article class="card">
+                <img src="https://live.staticflickr.com/3812/10642511523_7209940c59_b.jpg" alt="Гостиница Русь" class="card-image" loading="lazy">
+                <div>
+                    <span class="card-year">1980</span>
+                    <h3 class="card-title">Гостиница «Русь»</h3>
+                    <p class="card-text">
+                        Санкт-Петербург. Характерный пример бруталистской 
+                        гостиницы с игрой объёмов.
+                    </p>
+                </div>
+                <div class="card-coords">59°55'45.0"N 30°19'30.0"E</div>
+            </article>
+
+            <article class="card">
+                <img src="https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA1IRvWC.img?w=1920&h=1280&m=4&q=89" alt="Дом Советов" class="card-image" loading="lazy">
+                <div>
+                    <span class="card-year">1970-е</span>
+                    <h3 class="card-title">Дом Советов</h3>
+                    <p class="card-text">
+                        Калининград. Массивный параллелепипед, символ 
+                        советского присутствия.
+                    </p>
+                </div>
+                <div class="card-coords">54°42'30.0"N 20°30'40.0"E</div>
+            </article>
+
+            <article class="card">
+                <img src="https://avatars.mds.yandex.net/i?id=002e62a3e06ea5a662211ee714c5072e_l-5161321-images-thumbs&n=13" alt="ЖК Лебедь" class="card-image" loading="lazy">
+                <div>
+                    <span class="card-year">1972</span>
+                    <h3 class="card-title">ЖК «Лебедь»</h3>
+                    <p class="card-text">
+                        Москва. Архитектор Андрей Меерсон. Главный пример 
+                        брутализма в жилищном строительстве.
+                    </p>
+                </div>
+                <div class="card-coords">55°44'10.0"N 37°35'50.0"E</div>
+            </article>
+
+            <article class="card">
+                <img src="https://avatars.mds.yandex.net/i?id=e6a8f03634af19f7335371da2073be2d_l-12935885-images-thumbs&n=13" alt="Министерство автодорог" class="card-image" loading="lazy">
+                <div>
+                    <span class="card-year">1975</span>
+                    <h3 class="card-title">Министерство автодорог</h3>
+                    <p class="card-text">
+                        Тбилиси. Сложная пространственная конструкция, 
+                        напоминающая горную гряду.
+                    </p>
+                </div>
+                <div class="card-coords">41°43'00.0"N 44°47'30.0"E</div>
+            </article>
+
+            <article class="card">
+                <img src="https://photos.wikimapia.org/p/00/01/25/69/97_big.jpg" alt="НИИ Гипрорыбфлот" class="card-image" loading="lazy">
+                <div>
+                    <span class="card-year">1970-е</span>
+                    <h3 class="card-title">НИИ «Гипрорыбфлот»</h3>
+                    <p class="card-text">
+                        Санкт-Петербург. Бетонные конструкции вынесены 
+                        на фасад, создавая динамичный ритм.
+                    </p>
+                </div>
+                <div class="card-coords">59°56'20.0"N 30°18'40.0"E</div>
+            </article>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <p class="footer-text">Вдохновлено storyofbrutalism.com</p>
+        <a href="https://storyofbrutalism.com/" target="_blank" rel="noopener noreferrer" class="footer-link">BRUTALIST WEBSITES →</a>
+        <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6;">
+            © 2026. Сделано с честностью.
+        </p>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <a href="#" class="back-to-top" id="backToTop" aria-label="Наверх">↑</a>
+
+    <script>
+        // DETECT TOUCH DEVICES
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+        // NOISE GENERATION - оптимизировано для мобильных
+        const canvas = document.getElementById('noise-canvas');
+        const ctx = canvas.getContext('2d');
+        let noiseEnabled = !isTouchDevice || window.innerWidth > 768;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        function generateNoise() {
+            if (!noiseEnabled) return;
+            
+            const imageData = ctx.createImageData(canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const value = Math.random() * 255;
+                data[i] = value;
+                data[i + 1] = value;
+                data[i + 2] = value;
+                data[i + 3] = 255;
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+            requestAnimationFrame(generateNoise);
+        }
+        generateNoise();
+
+        // CUSTOM CURSOR - только для десктопа
+        if (!isTouchDevice) {
+            const cursor = document.querySelector('.cursor');
+            const links = document.querySelectorAll('a, .card');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = (e.clientX - 10) + 'px';
+                cursor.style.top = (e.clientY - 10) + 'px';
+            });
+
+            links.forEach(link => {
+                link.addEventListener('mouseenter', () => cursor.classList.add('active'));
+                link.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+            });
+        }
+
+        // MOBILE MENU TOGGLE
+        const menuToggle = document.getElementById('menuToggle');
+        const nav = document.getElementById('nav');
+        let menuOpen = false;
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            nav.style.display = menuOpen ? 'block' : 'flex';
+            nav.style.position = menuOpen ? 'absolute' : 'static';
+            nav.style.top = menuOpen ? '100%' : 'auto';
+            nav.style.left = menuOpen ? '0' : 'auto';
+            nav.style.right = menuOpen ? '0' : 'auto';
+            nav.style.background = menuOpen ? 'rgba(255,255,255,0.98)' : 'transparent';
+            nav.style.padding = menuOpen ? '20px' : '0';
+            nav.style.border = menuOpen ? '2px solid #000' : 'none';
+            
+            if (menuOpen) {
+                nav.querySelector('ul').style.flexDirection = 'column';
+                nav.querySelector('ul').style.gap = '15px';
+                nav.querySelector('ul').style.alignItems = 'flex-start';
+            }
+        }
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', toggleMenu);
+            menuToggle.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleMenu();
+                }
+            });
+        }
+
+        // Close menu when clicking a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (menuOpen && window.innerWidth < 768) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // SMOOTH SCROLL
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 70;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // SCROLL REVEAL
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `all 0.5s ease ${index * 0.08}s`;
+            observer.observe(card);
+        });
+
+        // PROGRESS BAR
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = scrolled + '%';
+        });
+
+        // BACK TO TOP BUTTON
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // RANDOM COORDINATES UPDATE (только на десктопе для экономии батареи)
+        if (!isTouchDevice) {
+            function randomCoords() {
+                const lat = (Math.random() * 180 - 90).toFixed(4);
+                const lng = (Math.random() * 360 - 180).toFixed(4);
+                const direction = document.querySelector('.floating-coords');
+                if (direction) {
+                    direction.textContent = `${lat}°N ${lng}°E`;
+                }
+            }
+            setInterval(randomCoords, 8000);
+        }
+
+        // PREVENT ZOOM ON DOUBLE TAP (mobile optimization)
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // CONSOLE EASTER EGG
+        console.log('%c BRUTALISM ', 'background: #000; color: #fff; font-size: 40px; font-weight: bold;');
+        console.log('%c Честность формы и содержания ', 'color: #888; font-size: 14px;');
+    </script>
+</body>
+</html>
