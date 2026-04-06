@@ -16,6 +16,7 @@
             --black: #000000;
             --white: #ffffff;
             --gray: #888888;
+            --red: #cc0000; /* АКЦЕНТНЫЙ КРАСНЫЙ */
         }
 
         html {
@@ -32,7 +33,7 @@
             line-height: 1.5;
         }
 
-        /* NOISE OVERLAY - работает везде */
+        /* NOISE OVERLAY */
         #noise-canvas {
             position: fixed;
             top: 0;
@@ -54,7 +55,7 @@
             pointer-events: none;
             z-index: 9998;
             opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-image: url("image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
             animation: noiseShift 0.5s steps(5) infinite;
         }
 
@@ -168,14 +169,17 @@
             display: block;
             padding: 10px 0;
             border-bottom: 1px solid var(--gray);
+            transition: color 0.2s;
         }
 
         nav a:last-child {
             border-bottom: none;
         }
 
+        /* АКЦЕНТНЫЙ КРАСНЫЙ ДЛЯ ССЫЛОК ПРИ НАВЕДЕНИИ */
+        nav a:hover,
         nav a:active {
-            color: var(--gray);
+            color: var(--red);
         }
 
         /* HERO SECTION */
@@ -236,6 +240,7 @@
             to { opacity: 1; }
         }
 
+        /* КООРДИНАТЫ В HERO — АКЦЕНТНЫЙ КРАСНЫЙ */
         .coordinates {
             position: absolute;
             bottom: 30px;
@@ -245,6 +250,7 @@
             opacity: 0;
             animation: fadeIn 1s 0.8s forwards;
             line-height: 1.4;
+            color: var(--red);
         }
 
         .scroll-indicator {
@@ -359,11 +365,12 @@
             text-transform: uppercase;
         }
 
+        /* КООРДИНАТЫ В КАРТОЧКАХ — АКЦЕНТНЫЙ КРАСНЫЙ */
         .card-coords {
             margin-top: 20px;
             font-size: 0.85rem;
             font-weight: 700;
-            opacity: 0.6;
+            color: var(--red);
         }
 
         .card-image {
@@ -432,14 +439,17 @@
             padding-bottom: 2px;
             display: inline-block;
             font-size: 1.1rem;
+            transition: all 0.2s;
         }
 
+        /* АКЦЕНТНЫЙ КРАСНЫЙ ДЛЯ ССЫЛКИ В ПОДВАЛЕ */
+        .footer-link:hover,
         .footer-link:active {
-            background: var(--white);
-            color: var(--black);
+            color: var(--red);
+            border-bottom-color: var(--red);
         }
 
-        /* DESKTOP STYLES (768px и выше) */
+        /* DESKTOP STYLES */
         @media (min-width: 768px) {
             .menu-toggle {
                 display: none;
@@ -479,6 +489,7 @@
 
             nav a:hover::after {
                 width: 100%;
+                background: var(--red); /* КРАСНОЕ подчёркивание */
             }
 
             header {
@@ -548,9 +559,10 @@
                 font-size: 0.85rem;
                 font-weight: 700;
                 letter-spacing: 2px;
-                opacity: 0.4;
+                opacity: 1;
                 pointer-events: none;
                 z-index: 100;
+                color: var(--red); /* КРАСНЫЕ координаты */
             }
         }
 
@@ -743,7 +755,7 @@
 
     <!-- FOOTER -->
     <footer id="contact">
-        <p class="footer-text">Вдохновлено storyofbrutalism.com/</p>
+        <p class="footer-text">Вдохновлено storyofbrutalism.com</p>
         <a href="https://storyofbrutalism.com/" target="_blank" rel="noopener noreferrer" class="footer-link">BRUTALIST WEBSITES →</a>
         <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.6;">
             © 2026. Сделано с честностью.
@@ -751,7 +763,7 @@
     </footer>
 
     <script>
-        // NOISE GENERATION - работает на всех устройствах
+        // NOISE GENERATION
         const canvas = document.getElementById('noise-canvas');
         const ctx = canvas.getContext('2d');
 
